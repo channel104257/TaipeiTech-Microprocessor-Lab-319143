@@ -1,0 +1,44 @@
+/*
+  範例 ch2_4
+  PB1(ON) 連接在 Pin 3, PB0(OFF) 連接在 Pin 2,
+  LED連接在 Pin 13
+*/
+int ON = 1, OFF = 1;  		// 宣告變數
+int PB[4] = {2,3,4,5};
+int LED[4] = {13,12,11,10};
+int PB_R0 = 6;
+int PB_R1 = 7;
+
+// 初始設定
+void setup() {                
+  for(int i; i<4; i++){
+     pinMode(PB[i], INPUT);
+  }
+  for(int i; i<4; i++){
+     pinMode(LED[i], OUTPUT);
+  }
+  pinMode(PB_R0, OUTPUT);
+  pinMode(PB_R1, OUTPUT);
+}
+
+// 主程式
+void loop() {
+  digitalWrite(PB_R0, LOW);
+  digitalWrite(PB_R1, HIGH);
+
+  for(int i; i<4; i++){
+     if (!(digitalRead(PB[i]))) {
+      digitalWrite(LED[i], LOW);
+    }
+  }
+
+  digitalWrite(PB_R0, HIGH);
+  digitalWrite(PB_R1, LOW);
+
+  if (!(digitalRead(PB[0]))) {
+    for(int i; i<4; i++){
+      digitalWrite(LED[i], HIGH);
+    }
+  }
+}
+
