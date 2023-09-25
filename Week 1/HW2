@@ -1,0 +1,67 @@
+#define LED1  12    // 宣告LED位置
+#define LED2  13    // 宣告LED位置
+#define PB0 2  		// 宣告按鈕開關位置
+int situ = 0;
+int debounceDelay = 5; // 設定連續 5 毫秒狀態相同時，判定為穩定
+
+// 初始設定
+void setup() { 
+  Serial.begin(9600);
+                 
+  pinMode(LED1, OUTPUT);	// 設定LED為輸出埠  
+  pinMode(LED2, OUTPUT);  // 設定LED為輸出埠
+  pinMode(PB0, INPUT);		// 設定PB0為輸入埠  
+}
+
+// 主程式
+void loop() {
+  if (!digitalRead(PB0) && debounce(PB0)) {
+    switch (situ) {
+      case 0:
+        digitalWrite(LED1, LOW);
+        digitalWrite(LED2, HIGH);
+        situ++;
+        break;
+
+      case 1:
+        digitalWrite(LED1, LOW);
+        digitalWrite(LED2, LOW);
+        situ++;
+        break;
+      
+      case 2:
+        digitalWrite(LED1, HIGH);
+        digitalWrite(LED2, LOW);
+        situ++;
+        break;
+
+      case 3:
+        digitalWrite(LED1, HIGH);
+        digitalWrite(LED2, HIGH);
+        situ = 0;
+        break;
+    }
+  }
+}
+
+boolean debounce(int pin)
+{
+  boolean state;
+  boolean previousState;
+  previousState = digitalRead(pin);  // 儲存按鈕狀態
+
+  for(int counter=0;counter<debounceDelay;counter++)
+  {
+    delay(1);
+    state = digitalRead(pin);// 再讀取一次按鈕狀態      // 如果兩次狀態不同，把 counter 設為零，重新確認狀態
+    if(state != previousState) 
+    {
+      counter=0;
+      previousState = state;
+    }
+  }
+  // for 迴圈每次都會 delay 1 毫秒，當每次讀取狀態都與第一次相同時，整個 for 跑完 5 毫秒，與之前設定的 bounceDelay 時間相同，回傳穩定的按鈕狀態
+  return state;
+}
+
+
